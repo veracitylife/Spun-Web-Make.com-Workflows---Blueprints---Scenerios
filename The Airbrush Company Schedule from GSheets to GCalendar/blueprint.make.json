@@ -1,0 +1,108 @@
+{
+  "name": "Airbrush Schedule: Sheets → Google Calendar",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0 } }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": { "handleErrors": true },
+      "mapper": {
+        "url": "https://www.googleapis.com/calendar/v3/calendars/{{1.calendar}}/events",
+        "method": "post",
+        "qs": [],
+        "headers": [
+          { "name": "Authorization", "value": "Bearer {{GOOGLE_CALENDAR_TOKEN}}" },
+          { "name": "Content-Type", "value": "application/json" }
+        ],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "data": "{\n  \"summary\": \"{{1.title}}\",\n  \"start\": { \"dateTime\": \"{{1.start}}\" },\n  \"end\": { \"dateTime\": \"{{1.end}}\" },\n  \"attendees\": [ { \"email\": \"{{1.attendee}}\" } ]\n}",
+        "shareCookies": false,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "rejectUnauthorized": true,
+        "gzip": true,
+        "timeout": ""
+      },
+      "metadata": { "designer": { "x": 250, "y": 0 } }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": { "designer": { "x": 500, "y": 0 } },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 4,
+              "module": "gmail:sendEmail",
+              "version": 1,
+              "parameters": {},
+              "filter": {
+                "name": "Event created",
+                "conditions": [[{ "a": "{{2.error}}", "b": false, "o": "boolean:equal" }]]
+              },
+              "mapper": {
+                "to": "{{1.notifyEmail}}",
+                "subject": "Calendar event created",
+                "contentType": "text/html",
+                "body": "Event created with ID: {{2.body.id}}"
+              },
+              "metadata": { "designer": { "x": 750, "y": 0 } }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 5,
+              "module": "gmail:sendEmail",
+              "version": 1,
+              "parameters": {},
+              "filter": {
+                "name": "Event failed",
+                "conditions": [[{ "a": "{{2.error}}", "b": true, "o": "boolean:equal" }]]
+              },
+              "mapper": {
+                "to": "{{1.notifyEmail}}",
+                "subject": "Calendar event failed",
+                "contentType": "text/html",
+                "body": "Failed to create: {{2.error}}"
+              },
+              "metadata": { "designer": { "x": 750, "y": 150 } }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": { "orphans": [] },
+    "zone": "us1.make.com",
+    "notes": []
+  }
+}

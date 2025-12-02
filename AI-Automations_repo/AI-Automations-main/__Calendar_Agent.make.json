@@ -1,0 +1,61 @@
+{
+  "name": "Calendar Agent (Make: Create/Get/Delete/Update)",
+  "flow": [
+    { "id": 1, "module": "gateway:CustomWebHook", "version": 1, "parameters": {}, "mapper": {}, "metadata": { "designer": { "x": 0, "y": 0 } } },
+    { "id": 2, "module": "builtin:BasicRouter", "version": 1, "mapper": null, "metadata": { "designer": { "x": 200, "y": 0 } },
+      "routes": [
+        { "flow": [
+          { "id": 3, "module": "http:ActionSendData", "version": 3, "parameters": { "handleErrors": true },
+            "filter": { "name": "Create", "conditions": [[{ "a": "{{1.action}}", "b": "create", "o": "string:equal" }]] },
+            "mapper": { "url": "https://www.googleapis.com/calendar/v3/calendars/{{1.calendar}}/events", "method": "post", "qs": [],
+              "headers": [ { "name": "Authorization", "value": "Bearer {{GOOGLE_CALENDAR_TOKEN}}" }, { "name": "Content-Type", "value": "application/json" } ],
+              "bodyType": "raw", "contentType": "application/json",
+              "data": "{ \"summary\": \"{{1.title}}\", \"start\": { \"dateTime\": \"{{1.start}}\" }, \"end\": { \"dateTime\": \"{{1.end}}\" } }",
+              "shareCookies": false, "followRedirect": true, "useQuerystring": false, "rejectUnauthorized": true, "gzip": true, "timeout": "" },
+            "metadata": { "designer": { "x": 450, "y": 0 } } },
+          { "id": 4, "module": "gmail:sendEmail", "version": 1, "parameters": {},
+            "mapper": { "to": "{{1.notifyEmail}}", "subject": "Event created", "contentType": "text/html", "body": "Event ID: {{3.body.id}}" },
+            "metadata": { "designer": { "x": 700, "y": 0 } } }
+        ] },
+        { "flow": [
+          { "id": 5, "module": "http:ActionSendData", "version": 3, "parameters": { "handleErrors": true },
+            "filter": { "name": "Get", "conditions": [[{ "a": "{{1.action}}", "b": "get", "o": "string:equal" }]] },
+            "mapper": { "url": "https://www.googleapis.com/calendar/v3/calendars/{{1.calendar}}/events", "method": "get", "qs": [ { "name": "timeMin", "value": "{{1.timeMin}}" }, { "name": "timeMax", "value": "{{1.timeMax}}" } ],
+              "headers": [ { "name": "Authorization", "value": "Bearer {{GOOGLE_CALENDAR_TOKEN}}" } ],
+              "bodyType": "raw", "contentType": "application/json", "data": "",
+              "shareCookies": false, "followRedirect": true, "useQuerystring": true, "rejectUnauthorized": true, "gzip": true, "timeout": "" },
+            "metadata": { "designer": { "x": 450, "y": 150 } } },
+          { "id": 6, "module": "gmail:sendEmail", "version": 1, "parameters": {},
+            "mapper": { "to": "{{1.notifyEmail}}", "subject": "Events fetched", "contentType": "text/html", "body": "Found {{length(5.body.items)}} events" },
+            "metadata": { "designer": { "x": 700, "y": 150 } } }
+        ] },
+        { "flow": [
+          { "id": 7, "module": "http:ActionSendData", "version": 3, "parameters": { "handleErrors": true },
+            "filter": { "name": "Delete", "conditions": [[{ "a": "{{1.action}}", "b": "delete", "o": "string:equal" }]] },
+            "mapper": { "url": "https://www.googleapis.com/calendar/v3/calendars/{{1.calendar}}/events/{{1.eventId}}", "method": "delete", "qs": [],
+              "headers": [ { "name": "Authorization", "value": "Bearer {{GOOGLE_CALENDAR_TOKEN}}" } ],
+              "bodyType": "raw", "contentType": "application/json", "data": "",
+              "shareCookies": false, "followRedirect": true, "useQuerystring": false, "rejectUnauthorized": true, "gzip": true, "timeout": "" },
+            "metadata": { "designer": { "x": 450, "y": 300 } } },
+          { "id": 8, "module": "gmail:sendEmail", "version": 1, "parameters": {},
+            "mapper": { "to": "{{1.notifyEmail}}", "subject": "Event deleted", "contentType": "text/html", "body": "Deleted {{1.eventId}}" },
+            "metadata": { "designer": { "x": 700, "y": 300 } } }
+        ] },
+        { "flow": [
+          { "id": 9, "module": "http:ActionSendData", "version": 3, "parameters": { "handleErrors": true },
+            "filter": { "name": "Update", "conditions": [[{ "a": "{{1.action}}", "b": "update", "o": "string:equal" }]] },
+            "mapper": { "url": "https://www.googleapis.com/calendar/v3/calendars/{{1.calendar}}/events/{{1.eventId}}", "method": "patch", "qs": [],
+              "headers": [ { "name": "Authorization", "value": "Bearer {{GOOGLE_CALENDAR_TOKEN}}" }, { "name": "Content-Type", "value": "application/json" } ],
+              "bodyType": "raw", "contentType": "application/json",
+              "data": "{ \"summary\": \"{{1.title}}\", \"start\": { \"dateTime\": \"{{1.start}}\" }, \"end\": { \"dateTime\": \"{{1.end}}\" } }",
+              "shareCookies": false, "followRedirect": true, "useQuerystring": false, "rejectUnauthorized": true, "gzip": true, "timeout": "" },
+            "metadata": { "designer": { "x": 450, "y": 450 } } },
+          { "id": 10, "module": "gmail:sendEmail", "version": 1, "parameters": {},
+            "mapper": { "to": "{{1.notifyEmail}}", "subject": "Event updated", "contentType": "text/html", "body": "Updated {{1.eventId}}" },
+            "metadata": { "designer": { "x": 700, "y": 450 } } }
+        ] }
+      ]
+    }
+  ],
+  "metadata": { "instant": true, "version": 1, "scenario": { "roundtrips": 1, "maxErrors": 3, "autoCommit": true, "autoCommitTriggerLast": true, "sequential": false, "slots": null, "confidential": false, "dataloss": false, "dlq": false, "freshVariables": false }, "designer": { "orphans": [] }, "zone": "us1.make.com", "notes": [] }
+}

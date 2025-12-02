@@ -1,0 +1,130 @@
+{
+  "name": "Automotive Slideshow Generator (Make Blueprint)",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0 } }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": { "handleErrors": true },
+      "mapper": {
+        "url": "https://api.shotstack.io/v1/render",
+        "method": "post",
+        "qs": [],
+        "headers": [
+          { "name": "x-api-key", "value": "{{SHOTSTACK_API_KEY}}" },
+          { "name": "Content-Type", "value": "application/json" }
+        ],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "data": "{\n  \"timeline\": {\n    \"tracks\": [\n      { \"clips\": {{1.images}} }\n    ]\n  },\n  \"output\": { \"format\": \"mp4\", \"resolution\": \"sd\" }\n}",
+        "shareCookies": false,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "rejectUnauthorized": true,
+        "gzip": true,
+        "timeout": ""
+      },
+      "metadata": { "designer": { "x": 250, "y": 0 } }
+    },
+    {
+      "id": 3,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": { "handleErrors": true },
+      "mapper": {
+        "url": "https://api.shotstack.io/v1/render/{{2.body.response.id}}",
+        "method": "get",
+        "qs": [],
+        "headers": [ { "name": "x-api-key", "value": "{{SHOTSTACK_API_KEY}}" } ],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "data": "",
+        "shareCookies": false,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "rejectUnauthorized": true,
+        "gzip": true,
+        "timeout": ""
+      },
+      "metadata": { "designer": { "x": 500, "y": 0 } }
+    },
+    {
+      "id": 4,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": { "designer": { "x": 750, "y": 0 } },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 5,
+              "module": "gmail:sendEmail",
+              "version": 1,
+              "parameters": {},
+              "filter": {
+                "name": "Render completed",
+                "conditions": [[{ "a": "{{3.body.status}}", "b": "done", "o": "string:equal" }]]
+              },
+              "mapper": {
+                "to": "{{1.notifyEmail}}",
+                "subject": "Slideshow ready",
+                "contentType": "text/html",
+                "body": "Your automotive slideshow is ready. URL: {{3.body.response.url}}"
+              },
+              "metadata": { "designer": { "x": 1000, "y": 0 } }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 6,
+              "module": "gmail:sendEmail",
+              "version": 1,
+              "parameters": {},
+              "filter": {
+                "name": "Render failed",
+                "conditions": [[{ "a": "{{3.error}}", "b": true, "o": "boolean:equal" }]]
+              },
+              "mapper": {
+                "to": "{{1.notifyEmail}}",
+                "subject": "Slideshow render failed",
+                "contentType": "text/html",
+                "body": "Render error: {{3.error}}"
+              },
+              "metadata": { "designer": { "x": 1000, "y": 150 } }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": { "orphans": [] },
+    "zone": "us1.make.com",
+    "notes": []
+  }
+}

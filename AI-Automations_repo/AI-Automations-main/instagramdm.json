@@ -50,7 +50,7 @@
     },
     {
       "parameters": {
-        "url": "https://www.instagram.com/emeraldsundesigns/"username\"]}}",
+        "url": "https://www.instagram.com/{{$json[\"username\"]}}",
         "path": "/mnt/data/screenshots/{{$json[\"username\"]}}.png"
       },
       "name": "Capture Screenshot",

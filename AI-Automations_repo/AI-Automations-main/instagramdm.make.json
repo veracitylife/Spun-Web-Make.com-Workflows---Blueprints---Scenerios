@@ -1,0 +1,30 @@
+{
+  "name": "Instagram DM Outreach (Make Blueprint)",
+  "flow": [
+    { "id": 1, "module": "gateway:CustomWebHook", "version": 1, "parameters": {}, "mapper": {}, "metadata": { "designer": { "x": 0, "y": 0 } } },
+    { "id": 2, "module": "http:ActionSendData", "version": 3, "parameters": { "handleErrors": true },
+      "mapper": { "url": "https://api-ssl.bitly.com/v4/shorten", "method": "post", "qs": [],
+        "headers": [ { "name": "Authorization", "value": "Bearer {{BITLY_ACCESS_TOKEN}}" }, { "name": "Content-Type", "value": "application/json" } ],
+        "bodyType": "raw", "contentType": "application/json",
+        "data": "{ \"long_url\": \"{{1.profile_link}}\" }",
+        "shareCookies": false, "followRedirect": true, "useQuerystring": false, "rejectUnauthorized": true, "gzip": true, "timeout": "" },
+      "metadata": { "designer": { "x": 250, "y": 0 } } },
+    { "id": 3, "module": "http:ActionSendData", "version": 3, "parameters": { "handleErrors": true },
+      "mapper": { "url": "https://graph.facebook.com/v20.0/{{INSTAGRAM_BUSINESS_ACCOUNT_ID}}/messages", "method": "post", "qs": [],
+        "headers": [ { "name": "Authorization", "value": "Bearer {{INSTAGRAM_ACCESS_TOKEN}}" }, { "name": "Content-Type", "value": "application/json" } ],
+        "bodyType": "raw", "contentType": "application/json",
+        "data": "{ \"recipient\": { \"username\": \"{{1.username}}\" }, \"message\": \"Hello {{1.name}}, check this out: {{2.body.link}}\" }",
+        "shareCookies": false, "followRedirect": true, "useQuerystring": false, "rejectUnauthorized": true, "gzip": true, "timeout": "" },
+      "metadata": { "designer": { "x": 500, "y": 0 } } },
+    { "id": 4, "module": "http:ActionSendData", "version": 3, "parameters": { "handleErrors": true },
+      "mapper": { "url": "https://api.screenshotmachine.com?key={{SCREENSHOT_API_KEY}}&url=https://www.instagram.com/{{1.username}}&device=desktop&cacheLimit=0", "method": "get", "qs": [],
+        "headers": [], "bodyType": "raw", "contentType": "application/json", "data": "",
+        "shareCookies": false, "followRedirect": true, "useQuerystring": true, "rejectUnauthorized": true, "gzip": true, "timeout": "" },
+      "metadata": { "designer": { "x": 750, "y": 0 } } },
+    { "id": 5, "module": "airtable:ActionCreateRecord", "version": 3, "parameters": {},
+      "mapper": { "base": "{{AIRTABLE_BASE_ID}}", "table": "{{AIRTABLE_TABLE_NAME}}", "typecast": false, "useColumnId": false,
+        "record": { "username": "{{1.username}}", "short_link": "{{2.body.link}}", "sent_at": "{{now}}" } },
+      "metadata": { "designer": { "x": 1000, "y": 0 } } }
+  ],
+  "metadata": { "instant": true, "version": 1, "scenario": { "roundtrips": 1, "maxErrors": 3, "autoCommit": true, "autoCommitTriggerLast": true, "sequential": false, "slots": null, "confidential": false, "dataloss": false, "dlq": false, "freshVariables": false }, "designer": { "orphans": [] }, "zone": "us1.make.com", "notes": [] }
+}
