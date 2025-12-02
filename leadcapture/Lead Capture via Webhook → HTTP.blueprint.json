@@ -1,0 +1,148 @@
+﻿{
+  "name": "FB Lead â†’ GoHighLevel â†’ SMS â†’ Airtable (with error email)",
+  "flow": [
+    {
+      "id": 1,
+      "module": "facebook-lead-ads:WatchLeads",
+      "version": 2,
+      "parameters": { "limit": 20 },
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0 } }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": { "handleErrors": false },
+      "mapper": {
+        "url": "https://services.leadconnectorhq.com/contacts/upsert",
+        "method": "post",
+        "qs": [],
+        "headers": [
+          { "name": "Authorization", "value": "Bearer YOUR_GHL_API_KEY" },
+          { "name": "Version", "value": "2021-07-28" },
+          { "name": "Content-Type", "value": "application/json" }
+        ],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "data": "{\"locationId\":\"YOUR_LOCATION_ID\",\"firstName\":\"{{1.data.full_name}}\",\"lastName\":\"\",\"email\":\"{{1.data.email}}\",\"phone\":\"{{1.data.phone_number}}\",\"source\":\"Facebook Lead Ads\"}",
+        "shareCookies": false,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "rejectUnauthorized": true,
+        "gzip": true,
+        "timeout": ""
+      },
+      "metadata": { "designer": { "x": 300, "y": 0 } }
+    },
+    {
+      "id": 3,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": { "handleErrors": false },
+      "mapper": {
+        "url": "https://YOUR_SMS_ENDPOINT_HERE",
+        "method": "post",
+        "qs": [],
+        "headers": [
+          { "name": "Authorization", "value": "Bearer YOUR_SMS_API_KEY" },
+          { "name": "Content-Type", "value": "application/json" }
+        ],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "data": "{\"to\":\"{{1.data.phone_number}}\",\"message\":\"Hi {{1.data.full_name}}, thanks for your interest in our offer! Reply STOP to opt out.\"}",
+        "shareCookies": false,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "rejectUnauthorized": true,
+        "gzip": true,
+        "timeout": ""
+      },
+      "metadata": { "designer": { "x": 600, "y": 0 } }
+    },
+    {
+      "id": 4,
+      "module": "airtable:ActionCreateRecord",
+      "version": 3,
+      "parameters": {},
+      "mapper": {
+        "base": "YOUR_AIRTABLE_BASE_ID",
+        "table": "YOUR_AIRTABLE_TABLE_ID",
+        "typecast": false,
+        "useColumnId": true,
+        "record": {
+          "fldLeadSource": "Facebook Lead Ads",
+          "fldFirstName": "{{1.data.full_name}}",
+          "fldLastName": "",
+          "fldEmail": "{{1.data.email}}",
+          "fldPhone": "{{1.data.phone_number}}",
+          "fldGHLContactId": "{{2.body.contact.id}}"
+        }
+      },
+      "metadata": { "designer": { "x": 900, "y": 0 } }
+    },
+    {
+      "id": 5,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": { "designer": { "x": 1200, "y": 0 } },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 11,
+              "module": "email:send-email",
+              "version": 1,
+              "parameters": {},
+              "filter": {
+                "name": "GHL/SMS error notification",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{or(or(greaterOrEqual(2.statusCode; 400); greaterOrEqual(3.statusCode; 400)); exists(4.error))}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "to": [ "ryan@spunwebtechnology.com" ],
+                "subject": "Error in FB Lead â†’ GoHighLevel â†’ SMS â†’ Airtable scenario",
+                "bodyType": "collection",
+                "contents": [
+                  {
+                    "text": "Hi,\n\nAn error occurred in the FB Lead â†’ GoHighLevel â†’ SMS â†’ Airtable scenario.\n\nLast lead:\n- Name: {{1.data.full_name}}\n- Email: {{1.data.email}}\n- Phone: {{1.data.phone_number}}\n\nHTTP statuses:\n- GHL: {{2.statusCode}}\n- SMS: {{3.statusCode}}\n\nRaw GHL response:\n{{2.body}}\n\nRaw SMS response:\n{{3.body}}\n\nâ€” Ryan Thompson automation\n"
+                  }
+                ],
+                "signature": ""
+              },
+              "metadata": { "designer": { "x": 1500, "y": 0 } }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": { "orphans": [] },
+    "zone": "us1.make.com",
+    "notes": []
+  }
+}
+

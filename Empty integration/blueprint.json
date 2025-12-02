@@ -1,0 +1,540 @@
+﻿{
+    "name": "Empty integration",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 112054,
+                "maxResults": 2
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restore": {
+                    "hook": {
+                        "label": "IFTTT weibo webhook"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "label": "Webhook",
+                        "type": "hook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "label": "Maximum number of results",
+                        "type": "number"
+                    }
+                ],
+                "interface": []
+            }
+        },
+        {
+            "id": 6,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 8,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": false
+                            },
+                            "filter": {
+                                "name": "image text weibo",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.image}}",
+                                            "b": "",
+                                            "o": "exist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "url": "https://maker.ifttt.com/trigger/image_text_weibo/with/key/mZrddwEydz004bgSJxxxx",
+                                "method": "post",
+                                "qs": [],
+                                "headers": [],
+                                "authUser": "",
+                                "authPass": "",
+                                "timeout": "",
+                                "shareCookies": false,
+                                "rejectUnauthorized": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "gzip": true,
+                                "bodyType": "x_www_form_urlencoded",
+                                "formFields": [
+                                    {
+                                        "key": "value1",
+                                        "value": "{{1.text}}"
+                                    },
+                                    {
+                                        "key": "value2",
+                                        "value": "{{1.image}}"
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": -150
+                                },
+                                "restore": {
+                                    "method": {
+                                        "mode": "chose",
+                                        "label": "POST"
+                                    },
+                                    "qs": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "headers": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "bodyType": {
+                                        "label": "Application/x-www-form-urlencoded"
+                                    },
+                                    "formFields": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined",
+                                            "undefined"
+                                        ]
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "type": "boolean",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "label": "URL",
+                                        "type": "url",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "label": "Method",
+                                        "type": "select",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "label": "Query String",
+                                        "type": "array",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "label": "Name",
+                                                "type": "text",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "label": "Value",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "labels": {
+                                            "add": "Add parameter",
+                                            "edit": "Edit parameter"
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "label": "Headers",
+                                        "type": "array",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "label": "Name",
+                                                "type": "text",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "label": "Value",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "labels": {
+                                            "add": "Add a header",
+                                            "edit": "Edit a header"
+                                        }
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "label": "User name",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "label": "Password",
+                                        "type": "password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "label": "Timeout",
+                                        "type": "uinteger",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "label": "Follow redirect",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "label": "Request compressed content",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "label": "Body type",
+                                        "type": "select",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "formFields",
+                                        "label": "Fields",
+                                        "type": "array",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "label": "Key",
+                                                "type": "text",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "label": "Value",
+                                                "type": "text"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 9,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": false
+                            },
+                            "filter": {
+                                "name": "only text weibo",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.image}}",
+                                            "b": "",
+                                            "o": "notexist"
+                                        },
+                                        {
+                                            "a": "{{1.text}}",
+                                            "b": "(Repost)|(è½¬å‘å¾®åš)|(\\/\\/)|(è½‰ç™¼å¾®åš)",
+                                            "o": "text:notpattern:ci"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "url": "https://maker.ifttt.com/trigger/only_text_weibo/with/key/mZrddwEydz004bgSJxxxx",
+                                "method": "post",
+                                "qs": [],
+                                "headers": [],
+                                "authUser": "",
+                                "authPass": "",
+                                "timeout": "",
+                                "shareCookies": false,
+                                "rejectUnauthorized": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "gzip": true,
+                                "bodyType": "x_www_form_urlencoded",
+                                "formFields": [
+                                    {
+                                        "key": "value1",
+                                        "value": "{{1.text}}"
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 150
+                                },
+                                "restore": {
+                                    "method": {
+                                        "mode": "chose",
+                                        "label": "POST"
+                                    },
+                                    "qs": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "headers": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "bodyType": {
+                                        "label": "Application/x-www-form-urlencoded"
+                                    },
+                                    "formFields": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "type": "boolean",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "label": "URL",
+                                        "type": "url",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "label": "Method",
+                                        "type": "select",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "label": "Query String",
+                                        "type": "array",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "label": "Name",
+                                                "type": "text",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "label": "Value",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "labels": {
+                                            "add": "Add parameter",
+                                            "edit": "Edit parameter"
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "label": "Headers",
+                                        "type": "array",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "label": "Name",
+                                                "type": "text",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "label": "Value",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "labels": {
+                                            "add": "Add a header",
+                                            "edit": "Edit a header"
+                                        }
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "label": "User name",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "label": "Password",
+                                        "type": "password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "label": "Timeout",
+                                        "type": "uinteger",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "label": "Follow redirect",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "label": "Request compressed content",
+                                        "type": "boolean",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "label": "Body type",
+                                        "type": "select",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "formFields",
+                                        "label": "Fields",
+                                        "type": "array",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "label": "Key",
+                                                "type": "text",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "label": "Value",
+                                                "type": "text"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}
+
+

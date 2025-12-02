@@ -1,0 +1,5 @@
+﻿Automotive slideshow generator -> blueprint.json
+Daily Digest -> blueprint.json
+Empty integration -> blueprint.json
+Slack Free looper -> blueprint.json
+The Airbrush Company Schedule from GSheets to GCalendar -> blueprint.json

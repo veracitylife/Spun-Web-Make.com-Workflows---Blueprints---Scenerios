@@ -1,0 +1,248 @@
+﻿{
+    "name": "Template | Add YouTube Videos To Spreadsheet | GPTPAT | V.1",
+    "flow": [
+        {
+            "id": 1,
+            "module": "youtube:pollingVideos",
+            "version": 4,
+            "parameters": {
+                "__IMTCONN__": 2227115,
+                "channelId": "{youtube channel id} - or select ID Finder ->",
+                "publishedBefore": null,
+                "publishedAfter": null,
+                "limit": 200
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My YouTube connection (G.P.T. P.A.T. <ryan@spunwebtechnology.com>)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "youtube"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:youtube",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "type": "hidden"
+                    },
+                    {
+                        "name": "channelId",
+                        "type": "text",
+                        "label": "Channel ID",
+                        "required": true
+                    },
+                    {
+                        "name": "publishedBefore",
+                        "type": "date",
+                        "label": "Published Before",
+                        "time": true
+                    },
+                    {
+                        "name": "publishedAfter",
+                        "type": "date",
+                        "label": "Published After",
+                        "time": true
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "google-sheets:addRow",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 384102
+            },
+            "mapper": {
+                "mode": "map",
+                "insertUnformatted": false,
+                "valueInputOption": "USER_ENTERED",
+                "insertDataOption": "INSERT_ROWS",
+                "spreadsheetId": "{Select Google Drive to login}",
+                "sheetId": "{Find sheet in Drive}",
+                "tableFirstRow": "A1:Z1"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My Google connection (ryan@spunwebtechnology.com)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "mode": {
+                            "label": "Enter manually"
+                        },
+                        "insertUnformatted": {
+                            "mode": "chose"
+                        },
+                        "valueInputOption": {
+                            "mode": "chose",
+                            "label": "User entered"
+                        },
+                        "insertDataOption": {
+                            "mode": "chose",
+                            "label": "Insert rows"
+                        },
+                        "tableFirstRow": {
+                            "nested": [],
+                            "label": "A-Z"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "mode",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "select",
+                                "fromAll",
+                                "map"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "insertUnformatted",
+                        "type": "boolean",
+                        "label": "Unformatted",
+                        "required": true
+                    },
+                    {
+                        "name": "valueInputOption",
+                        "type": "select",
+                        "label": "Value input option",
+                        "validate": {
+                            "enum": [
+                                "USER_ENTERED",
+                                "RAW"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "insertDataOption",
+                        "type": "select",
+                        "label": "Insert data option",
+                        "validate": {
+                            "enum": [
+                                "INSERT_ROWS",
+                                "OVERWRITE"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "text",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "text",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "tableFirstRow",
+                        "type": "select",
+                        "label": "Column range",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "A1:Z1",
+                                "A1:BZ1",
+                                "A1:CZ1",
+                                "A1:DZ1",
+                                "A1:MZ1",
+                                "A1:ZZ1"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us2.make.com",
+        "notes": [
+            {
+                "moduleIds": [
+                    1
+                ],
+                "content": "<ol><li>Log in with your Youtube credentials. Create a connection if you haven't already.</li><li>Add Youtube handle to the Channel ID finder, if you do not already have it. <ol><li>handle= https://www.youtube.com/@EmeraldSunDJ sure to select 200 or so, a relatively high number, to make sure you get all of the videos, or how ever many you are looking for.</li></ol><p></p><p></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            },
+            {
+                "moduleIds": [
+                    5
+                ],
+                "content": "<ol><li>Login to your Google Drive credentials. Create a new connection if you don&#39;t already have one.</li><li>Select your file by drive, and find the sheet within your folder structure.</li><li>Map each column from the Youtube field to the Google Sheets. For Video link URL, copy and paste this formula :https://www.youtube.com/@EmeraldSunDJ for Spreadsheet to download </a></li></ol>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            }
+        ]
+    }
+}
+
+
+

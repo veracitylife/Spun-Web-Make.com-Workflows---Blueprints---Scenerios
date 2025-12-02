@@ -1,0 +1,656 @@
+﻿{
+    "name": "Daily Digest",
+    "flow": [
+        {
+            "id": 12,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": -783,
+                    "y": 16
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 1,
+                            "module": "weather:ActionGetDailyForecast",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "city": "Omsk",
+                                "days": [
+                                    1
+                                ],
+                                "type": "name"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": -541,
+                                    "y": 322
+                                },
+                                "restore": {
+                                    "days": {
+                                        "label": [
+                                            null
+                                        ]
+                                    },
+                                    "type": {
+                                        "label": "cities"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "days",
+                                        "type": "select",
+                                        "label": "Days",
+                                        "multiple": true,
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                1,
+                                                2,
+                                                3,
+                                                4,
+                                                5,
+                                                6,
+                                                7,
+                                                8,
+                                                9,
+                                                10,
+                                                11,
+                                                12,
+                                                13,
+                                                14,
+                                                15,
+                                                16
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "select",
+                                        "label": "I want to enter a location by",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "name",
+                                                "coords"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "city",
+                                        "type": "text",
+                                        "label": "City",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "module": "util:Switcher",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "input": "{{1.icon}}",
+                                "casesTable": [
+                                    {
+                                        "output": "ÑÑÐ½Ð¾ â˜€ï¸",
+                                        "pattern": "01.\\.png$"
+                                    },
+                                    {
+                                        "output": "ÑÐ»Ð°Ð±Ð°Ñ Ð¾Ð±Ð»Ð°Ñ‡Ð½Ð¾ÑÑ‚ÑŒ â›…ï¸",
+                                        "pattern": "02.\\.png$"
+                                    },
+                                    {
+                                        "output": "Ð¾Ð±Ð»Ð°Ñ‡Ð½Ð¾ â˜ï¸",
+                                        "pattern": "03.\\.png$"
+                                    },
+                                    {
+                                        "output": "ÑÐ¸Ð»ÑŒÐ½Ð°Ñ Ð¾Ð±Ð»Ð°Ñ‡Ð½Ð¾ÑÑ‚ÑŒ â˜ï¸â˜ï¸",
+                                        "pattern": "04.\\.png$"
+                                    },
+                                    {
+                                        "output": "ÑÐ¸Ð»ÑŒÐ½Ñ‹Ð¹ Ð´Ð¾Ð¶Ð´ÑŒ ðŸŒ§",
+                                        "pattern": "09.\\.png$"
+                                    },
+                                    {
+                                        "output": "Ð´Ð¾Ð¶Ð´ÑŒ ðŸŒ¦",
+                                        "pattern": "10.\\.png$"
+                                    },
+                                    {
+                                        "output": "Ð³Ñ€Ð¾Ð·Ð° ðŸŒ©",
+                                        "pattern": "11.\\.png$"
+                                    },
+                                    {
+                                        "output": "ÑÐ½ÐµÐ³ â„ï¸",
+                                        "pattern": "13.\\.png$"
+                                    },
+                                    {
+                                        "output": "Ñ‚ÑƒÐ¼Ð°Ð½ ðŸŒ«",
+                                        "pattern": "50.\\.png$"
+                                    }
+                                ],
+                                "elseOutput": "Ð½ÐµÐ¿Ð¾Ð½ÑÑ‚Ð½Ð¾",
+                                "useRegExpMatch": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": -172,
+                                    "y": 318,
+                                    "name": "Format weather condition"
+                                },
+                                "restore": {
+                                    "casesTable": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined",
+                                            "undefined",
+                                            "undefined",
+                                            "undefined",
+                                            "undefined",
+                                            "undefined",
+                                            "undefined",
+                                            "undefined",
+                                            "undefined"
+                                        ]
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "input",
+                                        "type": "text",
+                                        "label": "Input"
+                                    },
+                                    {
+                                        "name": "useRegExpMatch",
+                                        "type": "boolean",
+                                        "label": "Use regular expressions to match",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "casesTable",
+                                        "spec": [
+                                            {
+                                                "name": "pattern",
+                                                "type": "text",
+                                                "label": "Pattern"
+                                            },
+                                            {
+                                                "name": "output",
+                                                "type": "any",
+                                                "label": "Output"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Cases",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "elseOutput",
+                                        "type": "any",
+                                        "label": "Else"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 9,
+                            "module": "util:ComposeTransformer",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "value": "Ð’ ÐžÐ¼ÑÐºÐµ Ð¾Ñ‚ {{floor(1.temperature.min)}} Ð´Ð¾ {{ceil(1.temperature.max)}}Â°Ð¡, {{7.output}}, Ð²ÐµÑ‚ÐµÑ€ {{round(1.wind.speed)}} Ð¼/Ñ."
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 169,
+                                    "y": 310,
+                                    "name": "Format weather"
+                                },
+                                "expect": [
+                                    {
+                                        "name": "value",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "multiline": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 14,
+                            "module": "util:SetVariable",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "name": "weather",
+                                "scope": "execution",
+                                "value": "{{9.value}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 483,
+                                    "y": 300,
+                                    "name": "Set weather"
+                                },
+                                "restore": {
+                                    "scope": {
+                                        "label": "One execution"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "name",
+                                        "type": "text",
+                                        "label": "Variable name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "scope",
+                                        "type": "select",
+                                        "label": "Variable lifetime",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "roundtrip",
+                                                "execution"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "value",
+                                        "type": "any",
+                                        "label": "Variable value"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "value",
+                                        "type": "any",
+                                        "label": "weather"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 8,
+                            "module": "google-calendar:ActionGetEvents",
+                            "version": 4,
+                            "parameters": {
+                                "account": 1282607,
+                                "continueWhenNoRes": true
+                            },
+                            "mapper": {
+                                "query": "",
+                                "orderBy": "startTime",
+                                "timeMax": "{{setMinute(setHour(now; 23); 59)}}",
+                                "timeMin": "{{setMinute(setHour(now; 0); 0)}}",
+                                "calendarId": "ryan@spunwebtechnology.com",
+                                "maxResults": "",
+                                "singleEvents": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": -452,
+                                    "y": -279,
+                                    "name": "Work calendar"
+                                },
+                                "restore": {
+                                    "account": {
+                                        "label": "ryan@spunwebtechnology.com"
+                                    },
+                                    "orderBy": {
+                                        "label": "Start time (ascending)"
+                                    },
+                                    "calendarId": {
+                                        "mode": "chose",
+                                        "label": "Work calendar"
+                                    },
+                                    "singleEvents": {
+                                        "mode": "chose"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "continueWhenNoRes",
+                                        "type": "boolean",
+                                        "label": "Continue the execution of the route even if the module returns no results",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "timeMin",
+                                        "type": "date",
+                                        "label": "Start date"
+                                    },
+                                    {
+                                        "name": "timeMax",
+                                        "type": "date",
+                                        "label": "End date"
+                                    },
+                                    {
+                                        "name": "singleEvents",
+                                        "type": "boolean",
+                                        "label": "Single events",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "query",
+                                        "type": "text",
+                                        "label": "Query"
+                                    },
+                                    {
+                                        "name": "orderBy",
+                                        "type": "select",
+                                        "label": "Order by",
+                                        "validate": {
+                                            "enum": [
+                                                "startTime",
+                                                "updated"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "maxResults",
+                                        "type": "uinteger",
+                                        "label": "Maximum number of returned events"
+                                    },
+                                    {
+                                        "name": "calendarId",
+                                        "type": "select",
+                                        "label": "Calendar",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "module": "util:ComposeTransformer",
+                            "version": 1,
+                            "parameters": {},
+                            "filter": {
+                                "name": "Only my events",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{8.creator.email}}",
+                                            "b": "ryan@spunwebtechnology.com",
+                                            "o": "text:equal"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "a": "{{map(8.attendees; \"responseStatus\"; \"email\"; \"ryan@spunwebtechnology.com\")}}",
+                                            "b": "accepted",
+                                            "o": "array:contain"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "a": "{{map(8.attendees; \"responseStatus\"; \"email\"; \"ryan@spunwebtechnology.com\")}}",
+                                            "b": "tentative",
+                                            "o": "array:contain"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "value": "{{formatDate(8.start; \"HH:mm\")}}â€“{{formatDate(8.end; \"HH:mm\")}} [{{8.summary}}]({{8.htmlLink}})"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": -159,
+                                    "y": -278,
+                                    "name": "Format calendar event"
+                                },
+                                "expect": [
+                                    {
+                                        "name": "value",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "multiline": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 16,
+                            "module": "util:TextAggregator",
+                            "version": 1,
+                            "parameters": {
+                                "feeder": 8,
+                                "rowSeparator": "\n"
+                            },
+                            "mapper": {
+                                "value": "{{10.value}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 156,
+                                    "y": -277,
+                                    "name": "Group calendar events"
+                                },
+                                "restore": {
+                                    "feeder": {
+                                        "label": "Work calendar - Get events [8]"
+                                    },
+                                    "rowSeparator": {
+                                        "label": "New row"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "rowSeparator",
+                                        "type": "select",
+                                        "label": "Row separator",
+                                        "validate": {
+                                            "enum": [
+                                                "\n",
+                                                "\t",
+                                                "other"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "value",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "multiline": true
+                                    }
+                                ],
+                                "advanced": true
+                            }
+                        },
+                        {
+                            "id": 15,
+                            "module": "util:GetVariable",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "name": "weather"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 703,
+                                    "y": -14,
+                                    "name": "Get weather"
+                                },
+                                "expect": [
+                                    {
+                                        "name": "name",
+                                        "type": "text",
+                                        "label": "Variable name",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 4,
+                            "module": "util:ComposeTransformer",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "value": "Ð”Ð¾Ð±Ñ€Ð¾Ðµ ÑƒÑ‚Ñ€Ð¾.\n\nÐŸÐ»Ð°Ð½ Ð½Ð° Ð´ÐµÐ½ÑŒ:\n{{16.text}}\n\n{{15.value}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1023,
+                                    "y": -27,
+                                    "name": "Make message"
+                                },
+                                "expect": [
+                                    {
+                                        "name": "value",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "multiline": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 3,
+                            "module": "telegram:SendReplyMessage",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 123456
+                            },
+                            "mapper": {
+                                "text": "{{4.value}}",
+                                "chatId": "@chat",
+                                "parseMode": "Markdown",
+                                "replyMarkup": "",
+                                "replyToMessageId": "",
+                                "disableNotification": true,
+                                "disableWebPagePreview": true,
+                                "replyMarkupAssembleType": "reply_markup_enter"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1336,
+                                    "y": -30
+                                },
+                                "restore": {
+                                    "parseMode": {
+                                        "label": "Markdown"
+                                    },
+                                    "__IMTCONN__": {
+                                        "label": "IntegromatBot"
+                                    },
+                                    "replyMarkupAssembleType": {
+                                        "label": "Enter the Reply Markup"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "chatId",
+                                        "type": "text",
+                                        "label": "Chat ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "parseMode",
+                                        "type": "select",
+                                        "label": "Parse Mode",
+                                        "validate": {
+                                            "enum": [
+                                                "Markdown",
+                                                "HTML"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "disableNotification",
+                                        "type": "boolean",
+                                        "label": "Disable Notifications"
+                                    },
+                                    {
+                                        "name": "disableWebPagePreview",
+                                        "type": "boolean",
+                                        "label": "Disable Link Previews"
+                                    },
+                                    {
+                                        "name": "replyToMessageId",
+                                        "type": "number",
+                                        "label": "Original Message ID"
+                                    },
+                                    {
+                                        "name": "replyMarkupAssembleType",
+                                        "type": "select",
+                                        "label": "Enter/Assemble the Reply Markup Field",
+                                        "validate": {
+                                            "enum": [
+                                                "reply_markup_enter",
+                                                "reply_markup_assemble"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "replyMarkup",
+                                        "type": "text",
+                                        "label": "Reply Markup"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}
+
+
+
+

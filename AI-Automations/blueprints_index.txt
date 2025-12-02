@@ -1,0 +1,4 @@
+﻿1. RAG Email - Jono Catliff -> blueprint.json
+1. RAG Social Media - Jono Catliff -> blueprint.json
+High Ticket Sales System Companies Hiring For SDRS -> blueprint.json
+Marketing New AI Post Generated - Upload to Contentful - Notify Content Manager -> blueprint.json

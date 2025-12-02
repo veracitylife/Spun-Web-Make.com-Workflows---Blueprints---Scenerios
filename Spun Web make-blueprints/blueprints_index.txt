@@ -1,0 +1,4 @@
+﻿Calendar Availability Check -> blueprint.json
+NeetoCal Appointment Booking -> blueprint.json
+VAPI Cold Caller Bot -> blueprint.json
+VAPI End of call report -> blueprint.json

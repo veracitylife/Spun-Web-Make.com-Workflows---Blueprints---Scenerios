@@ -1,0 +1,182 @@
+﻿{
+  "name": "FB Lead â†’ GoHighLevel â†’ SMS â†’ Airtable (with error email)",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": { "x": 0, "y": 0 }
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true
+      },
+      "mapper": {
+        "url": "https://rest.gohighlevel.com/v1/contacts/",
+        "method": "post",
+        "qs": [],
+        "headers": [
+          {
+            "name": "Authorization",
+            "value": "Bearer YOUR_GHL_API_KEY"
+          },
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "data": "{\"firstName\":\"{{1.first_name}}\",\"lastName\":\"{{1.last_name}}\",\"email\":\"{{1.email}}\",\"phone\":\"{{1.phone}}\"}",
+        "shareCookies": false,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "rejectUnauthorized": true,
+        "gzip": true,
+        "timeout": ""
+      },
+      "metadata": {
+        "designer": { "x": 250, "y": 0 }
+      }
+    },
+    {
+      "id": 3,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true
+      },
+      "mapper": {
+        "url": "https://YOUR_SMS_ENDPOINT_HERE",
+        "method": "post",
+        "qs": [],
+        "headers": [
+          {
+            "name": "Authorization",
+            "value": "Bearer YOUR_SMS_API_KEY"
+          },
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "data": "{\"to\":\"{{1.phone}}\",\"message\":\"Hi {{1.first_name}}, thanks for your interest!\"}",
+        "shareCookies": false,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "rejectUnauthorized": true,
+        "gzip": true,
+        "timeout": ""
+      },
+      "metadata": {
+        "designer": { "x": 500, "y": 0 }
+      }
+    },
+    {
+      "id": 4,
+      "module": "airtable:ActionCreateRecord",
+      "version": 3,
+      "parameters": {},
+      "mapper": {
+        "base": "YOUR_AIRTABLE_BASE_ID",
+        "table": "YOUR_AIRTABLE_TABLE_ID",
+        "typecast": false,
+        "useColumnId": false,
+        "record": {
+          "fldLeadSource": "Facebook Lead Ads",
+          "fldFirstName": "{{1.first_name}}",
+          "fldLastName": "{{1.last_name}}",
+          "fldEmail": "{{1.email}}",
+          "fldPhone": "{{1.phone}}",
+          "fldGHLContactId": "{{2.body.id}}"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 750, "y": 0 }
+      }
+    },
+    {
+      "id": 5,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": {
+        "designer": { "x": 1000, "y": 0 }
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 6,
+              "module": "gmail:sendEmail",
+              "version": 1,
+              "parameters": {},
+              "filter": {
+                "name": "Any HTTP/Airtable error",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{2.error}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{3.error}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    },
+                    {
+                      "a": "{{4.error}}",
+                      "b": true,
+                      "o": "boolean:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "to": "ryan@spunwebtechnology.com",
+                "subject": "Lead flow error in Make",
+                "contentType": "text/html",
+                "body": "An error occurred in the FB Lead â†’ GHL â†’ SMS â†’ Airtable scenario.<br><br>Webhook ID: {{1.__meta.id}}<br>GoHighLevel error: {{2.error}}<br>SMS error: {{3.error}}<br>Airtable error: {{4.error}}"
+              },
+              "metadata": {
+                "designer": { "x": 1250, "y": 0 }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": { "orphans": [] },
+    "zone": "us1.make.com",
+    "notes": []
+  }
+}
+

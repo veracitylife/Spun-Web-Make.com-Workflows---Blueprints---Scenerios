@@ -1,0 +1,2 @@
+fb_lead_id,stage,error_message,raw_payload,timestamp,make_execution_id
+TEST_LEAD_12345,validation,Missing email and phone,"{""example"": ""payload""}",2025-11-23T00:00:00Z,EXEC_ABC123

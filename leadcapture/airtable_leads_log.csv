@@ -1,0 +1,3 @@
+﻿fb_lead_id,first_name,last_name,email,phone,ghl_contact_id,sms_status,status,form_id,campaign_id,adset_id,ad_id,raw_payload,created_at,updated_at
+TEST_LEAD_12345,Alex,Doe,ryan@spunwebtechnology.com,+18083656628,CONTACT_PLACEHOLDER,Sent,Created,FORM_ID,CAMPAIGN_ID,ADSET_ID,AD_ID,"{""example"": ""payload""}",2025-11-23T00:00:00Z,2025-11-23T00:00:00Z
+
