@@ -1,80 +1,11 @@
-import json
-
-# Создаем JSON структуру сценария для импорта в Make.com
-make_scenario = {
-    "name": "Business Card Processing",
-    "modules": [
-        {
-            "module": "Google Sheets",
-            "action": "Watch Rows",
-            "parameters": {
-                "spreadsheet": "{{YOUR_SPREADSHEET_ID}}",
-                "sheet": "{{YOUR_SHEET_NAME}}",
-                "triggerColumns": ["Image URL"],
-                "limit": 1
-            }
-        },
-        {
-            "module": "HTTP",
-            "action": "Make a request",
-            "parameters": {
-                "method": "GET",
-                "url": "{{1.output.Image URL}}"
-            }
-        },
-        {
-            "module": "OpenAI",
-            "action": "Process Image",
-            "parameters": {
-                "model": "gpt-4-vision",
-                "image": "{{2.output.body}}",
-                "prompt": "Извлеки информацию из визитной карточки и верни JSON со следующими полями: business_name, contact_name, phone_number, email, website, address"
-            }
-        },
-        {
-            "module": "JSON",
-            "action": "Parse JSON",
-            "parameters": {
-                "data": "{{3.output.response}}"
-            }
-        },
-        {
-            "module": "Google Sheets",
-            "action": "Update a Row",
-            "parameters": {
-                "spreadsheet": "{{YOUR_SPREADSHEET_ID}}",
-                "sheet": "{{YOUR_SHEET_NAME}}",
-                "rowId": "{{1.output.rowId}}",
-                "values": {
-                    "Business Name": "{{4.output.business_name}}",
-                    "Contact Name": "{{4.output.contact_name}}",
-                    "Phone Number": "{{4.output.phone_number}}",
-                    "Email": "{{4.output.email}}",
-                    "Website": "{{4.output.website}}",
-                    "Address": "{{4.output.address}}",
-                    "Status": "Processed"
-                }
-            }
-        },
-        {
-            "module": "Google Sheets",
-            "action": "Add a Row",
-            "parameters": {
-                "spreadsheet": "{{YOUR_LOG_SPREADSHEET_ID}}",
-                "sheet": "{{YOUR_LOG_SHEET_NAME}}",
-                "values": {
-                    "Timestamp": "{{now}}",
-                    "Image URL": "{{1.output.Image URL}}",
-                    "Extracted Data": "{{3.output.response}}"
-                }
-            }
-        }
-    ]
+{
+  "name": "Business Card Processing (Make Blueprint)",
+  "flow": [
+    {"id":1,"module":"gateway:CustomWebHook","version":1,"parameters":{},"mapper":{},"metadata":{"designer":{"x":0,"y":0}}},
+    {"id":2,"module":"http:ActionSendData","version":3,"parameters":{"handleErrors":true},"mapper":{"url":"{{1.imageUrl}}","method":"get","qs":[],"headers":[],"bodyType":"raw","contentType":"application/json","data":"","shareCookies":false,"followRedirect":true,"useQuerystring":false,"rejectUnauthorized":true,"gzip":true,"timeout":""},"metadata":{"designer":{"x":250,"y":0}}},
+    {"id":3,"module":"http:ActionSendData","version":3,"parameters":{"handleErrors":true},"mapper":{"url":"https://api.openai.com/v1/chat/completions","method":"post","qs":[],"headers":[{"name":"Authorization","value":"Bearer {{OPENAI_API_KEY}}"},{"name":"Content-Type","value":"application/json"}],"bodyType":"raw","contentType":"application/json","data":"{\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        { \"type\": \"input_text\", \"text\": \"Extract business_name, contact_name, phone_number, email, website, address as JSON.\" },\n        { \"type\": \"input_image\", \"image_url\": \"{{1.imageUrl}}\" }\n      ]\n    }\n  ]\n}","shareCookies":false,"followRedirect":true,"useQuerystring":false,"rejectUnauthorized":true,"gzip":true,"timeout":""},"metadata":{"designer":{"x":500,"y":0}}},
+    {"id":4,"module":"airtable:ActionCreateRecord","version":3,"parameters":{},"mapper":{"base":"{{AIRTABLE_BASE_ID}}","table":"{{AIRTABLE_TABLE_NAME}}","typecast":false,"useColumnId":false,"record":{"business_name":"{{3.body.choices[0].message.content.business_name}}","contact_name":"{{3.body.choices[0].message.content.contact_name}}","phone_number":"{{3.body.choices[0].message.content.phone_number}}","email":"{{3.body.choices[0].message.content.email}}","website":"{{3.body.choices[0].message.content.website}}","address":"{{3.body.choices[0].message.content.address}}","source_image":"{{1.imageUrl}}","status":"Processed"}},"metadata":{"designer":{"x":750,"y":0}}},
+    {"id":5,"module":"gmail:sendEmail","version":1,"parameters":{},"mapper":{"to":"{{1.notifyEmail}}","subject":"Business card processed","contentType":"text/html","body":"Processed data stored in Airtable for image: {{1.imageUrl}}"},"metadata":{"designer":{"x":1000,"y":0}}}
+  ],
+  "metadata": {"instant":true,"version":1,"scenario":{"roundtrips":1,"maxErrors":3,"autoCommit":true,"autoCommitTriggerLast":true,"sequential":false,"slots":null,"confidential":false,"dataloss":false,"dlq":false,"freshVariables":false},"designer":{"orphans":[]},"zone":"us1.make.com","notes":[]}
 }
-
-# Сохраняем в JSON файл
-file_path = "/mnt/data/make_business_card_processing.json"
-with open(file_path, "w") as f:
-    json.dump(make_scenario, f, indent=4)
-
-file_path

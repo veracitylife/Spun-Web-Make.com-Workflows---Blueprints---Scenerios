@@ -1,92 +1,11 @@
-﻿{
-  "nodes": [
-    {
-      "parameters": {
-        "interval": 3600
-      },
-      "name": "Schedule Trigger",
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1,
-      "position": [100, 200]
-    },
-    {
-      "parameters": {
-        "operation": "list",
-        "sheetId": "{{GOOGLE_SHEET_ID}}",
-        "range": "A2:D100"
-      },
-      "name": "Fetch User Profiles",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 1,
-      "position": [300, 200]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api-ssl.bitly.com/v4/shorten",
-        "json": true,
-        "options": {},
-        "body": {
-          "long_url": "={{$json[\"profile_link\"]}}"
-        },
-        "headers": {
-          "Authorization": "Bearer {{BITLY_ACCESS_TOKEN}}"
-        }
-      },
-      "name": "Shorten URL",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 1,
-      "position": [500, 200]
-    },
-    {
-      "parameters": {
-        "text": "Hello {{$json[\"name\"]}}, check this out: {{$node[\"Shorten URL\"].json[\"id\"]}}",
-        "recipient": "={{$json[\"username\"]}}"
-      },
-      "name": "Send Instagram DM",
-      "type": "custom.instagramDmSender",
-      "typeVersion": 1,
-      "position": [700, 200]
-    },
-    {
-      "parameters": {
-        "url": "https://www.instagram.com/{{$json[\"username\"]}}",
-        "path": "/mnt/data/screenshots/{{$json[\"username\"]}}.png"
-      },
-      "name": "Capture Screenshot",
-      "type": "n8n-nodes-base.puppeteer",
-      "typeVersion": 1,
-      "position": [900, 200]
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "sheetId": "{{GOOGLE_SHEET_ID}}",
-        "range": "E2:E100",
-        "values": "={{$json[\"username\"]}}, {{$node[\"Shorten URL\"].json[\"id\"]}}, {{Date.now()}}"
-      },
-      "name": "Log Sent Message",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 1,
-      "position": [1100, 200]
-    }
+{
+  "name": "Instagram DM Outreach (Make Blueprint)",
+  "flow": [
+    {"id":1,"module":"gateway:CustomWebHook","version":1,"parameters":{},"mapper":{},"metadata":{"designer":{"x":0,"y":0}}},
+    {"id":2,"module":"http:ActionSendData","version":3,"parameters":{"handleErrors":true},"mapper":{"url":"https://api-ssl.bitly.com/v4/shorten","method":"post","qs":[],"headers":[{"name":"Authorization","value":"Bearer {{BITLY_ACCESS_TOKEN}}"},{"name":"Content-Type","value":"application/json"}],"bodyType":"raw","contentType":"application/json","data":"{ \"long_url\": \"{{1.profile_link}}\" }","shareCookies":false,"followRedirect":true,"useQuerystring":false,"rejectUnauthorized":true,"gzip":true,"timeout":""},"metadata":{"designer":{"x":250,"y":0}}},
+    {"id":3,"module":"http:ActionSendData","version":3,"parameters":{"handleErrors":true},"mapper":{"url":"https://graph.facebook.com/v20.0/{{INSTAGRAM_BUSINESS_ACCOUNT_ID}}/messages","method":"post","qs":[],"headers":[{"name":"Authorization","value":"Bearer {{INSTAGRAM_ACCESS_TOKEN}}"},{"name":"Content-Type","value":"application/json"}],"bodyType":"raw","contentType":"application/json","data":"{ \"recipient\": { \"username\": \"{{1.username}}\" }, \"message\": \"Hello {{1.name}}, check this out: {{2.body.link}}\" }","shareCookies":false,"followRedirect":true,"useQuerystring":false,"rejectUnauthorized":true,"gzip":true,"timeout":""},"metadata":{"designer":{"x":500,"y":0}}},
+    {"id":4,"module":"http:ActionSendData","version":3,"parameters":{"handleErrors":true},"mapper":{"url":"https://api.screenshotmachine.com?key={{SCREENSHOT_API_KEY}}&url=https://www.instagram.com/{{1.username}}&device=desktop&cacheLimit=0","method":"get","qs":[],"headers":[],"bodyType":"raw","contentType":"application/json","data":"","shareCookies":false,"followRedirect":true,"useQuerystring":true,"rejectUnauthorized":true,"gzip":true,"timeout":""},"metadata":{"designer":{"x":750,"y":0}}},
+    {"id":5,"module":"airtable:ActionCreateRecord","version":3,"parameters":{},"mapper":{"base":"{{AIRTABLE_BASE_ID}}","table":"{{AIRTABLE_TABLE_NAME}}","typecast":false,"useColumnId":false,"record":{"username":"{{1.username}}","short_link":"{{2.body.link}}","sent_at":"{{now}}"}},"metadata":{"designer":{"x":1000,"y":0}}}
   ],
-  "connections": {
-    "Schedule Trigger": {
-      "main": [[{"node": "Fetch User Profiles", "type": "main"}]]
-    },
-    "Fetch User Profiles": {
-      "main": [[{"node": "Shorten URL", "type": "main"}]]
-    },
-    "Shorten URL": {
-      "main": [[{"node": "Send Instagram DM", "type": "main"}]]
-    },
-    "Send Instagram DM": {
-      "main": [[{"node": "Capture Screenshot", "type": "main"}]]
-    },
-    "Capture Screenshot": {
-      "main": [[{"node": "Log Sent Message", "type": "main"}]]
-    }
-  }
+  "metadata": {"instant":true,"version":1,"scenario":{"roundtrips":1,"maxErrors":3,"autoCommit":true,"autoCommitTriggerLast":true,"sequential":false,"slots":null,"confidential":false,"dataloss":false,"dlq":false,"freshVariables":false},"designer":{"orphans":[]},"zone":"us1.make.com","notes":[]}
 }
-

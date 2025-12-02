@@ -1,0 +1,252 @@
+title,module
+Custom Webhook,gateway:CustomWebHook
+Webhook Response,gateway:WebhookResponse
+HTTP Make a request,http:ActionSendData
+HTTP OAuth 2.0 request,http:MakeOAuth2Request
+HTTP Get a file,http:GetFile
+HTTP Download a file,http:DownloadFile
+HTTP Upload a file,http:UploadFile
+HTTP Delete request,http:DeleteRequest
+Router,builtin:BasicRouter
+Iterator,util:Iterator
+Repeater,util:Repeater
+Converger,builtin:Converger
+Sleep (Delay),util:Sleep
+Text Parser,util:TextParser
+Text Formatter,util:TextFormatter
+Set Variable,util:SetVariable
+Math Operation,util:MathOperation
+String Operation,util:StringOperation
+Base64 Encode,util:Base64Encode
+Base64 Decode,util:Base64Decode
+Hash (MD5/SHA),util:Hash
+HMAC,util:Hmac
+JWT Sign,util:JwtSign
+UUID,util:UUID
+Random,util:Random
+Filter,util:Filter
+Break,util:Break
+Continue,util:Continue
+Array Aggregator,util:ArrayAggregator
+Remove Duplicates,util:ArrayRemoveDuplicates
+CSV Parse,csv:Parse
+CSV Create,csv:Create
+JSON Parse,json:ParseJSON
+JSON Create,json:Create
+JSON Transform,json:Transform
+JSON Validate,json:Validate
+XML Parse,xml:Parse
+XML Create,xml:Create
+XML Validate,xml:Validate
+Datastore Create Record,datastore:CreateRecord
+Datastore Get Record,datastore:GetRecord
+Datastore Update Record,datastore:UpdateRecord
+Datastore Delete Record,datastore:DeleteRecord
+Datastore List Records,datastore:ListRecords
+Files Save File,files:SaveFile
+FTP Upload File,ftp:UploadFile
+SFTP Upload File,sftp:UploadFile
+SMTP Send Email,smtp:SendEmail
+Email Send,email:SendEmail
+Email Parse,email:ParseEmail
+Gmail Send Email,gmail:sendEmail
+Gmail Watch Emails,gmail:WatchEmails
+Google Sheets Add Row,google-sheets:AddRow
+Google Sheets Update Row,google-sheets:UpdateRow
+Google Sheets Get Values,google-sheets:GetValues
+Google Sheets Append Values,google-sheets:AppendValues
+Google Sheets Watch Rows,google-sheets:WatchRows
+Google Drive Upload File,google-drive:UploadFile
+Google Drive Create Folder,google-drive:CreateFolder
+Google Drive List Files,google-drive:ListFiles
+Google Drive Watch Files,google-drive:WatchFiles
+Google Calendar Create Event,google-calendar:CreateEvent
+Google Calendar Update Event,google-calendar:UpdateEvent
+Google Calendar Delete Event,google-calendar:DeleteEvent
+Google Calendar Get Events,google-calendar:GetEvents
+Google Docs Create Document,google-docs:CreateDocument
+Google Docs Update Document,google-docs:UpdateDocument
+Google Forms Watch Responses,google-forms:WatchResponses
+Google Translate Translate Text,google-translate:TranslateText
+Google Vision Annotate Image,google-vision:AnnotateImage
+Google Speech Transcribe,google-speech:Transcribe
+YouTube Upload Video,youtube:UploadVideo
+Slack Post Message,slack:PostMessage
+Slack Update Message,slack:UpdateMessage
+Slack Watch Messages,slack:WatchMessages
+Discord Send Message,discord:SendMessage
+Discord Watch Messages,discord:WatchMessages
+Telegram Send Message,telegram:SendMessage
+Telegram Watch Updates,telegram:WatchUpdates
+Twilio Send SMS,twilio:SendSMS
+Twilio Make Call,twilio:MakeCall
+Twilio Send WhatsApp,twilio:SendWhatsApp
+Airtable Create Record,airtable:ActionCreateRecord
+Airtable Update Record,airtable:ActionUpdateRecord
+Airtable Find Records,airtable:ActionFindRecords
+Airtable Watch Records,airtable:WatchRecords
+Notion Create Page,notion:CreatePage
+Notion Update Page,notion:UpdatePage
+Notion Query Database,notion:QueryDatabase
+Trello Create Card,trello:CreateCard
+Trello Update Card,trello:UpdateCard
+Trello Watch Cards,trello:WatchCards
+Asana Create Task,asana:CreateTask
+Asana Update Task,asana:UpdateTask
+Asana Watch Tasks,asana:WatchTasks
+Jira Create Issue,jira:CreateIssue
+Jira Update Issue,jira:UpdateIssue
+Jira Search Issues,jira:SearchIssues
+GitHub Create Issue,github:CreateIssue
+GitHub Create Pull Request,github:CreatePullRequest
+GitHub Watch Events,github:WatchEvents
+GitLab Create Issue,gitlab:CreateIssue
+Bitbucket Create Issue,bitbucket:CreateIssue
+Stripe Create Charge,stripe:CreateCharge
+Stripe Create Customer,stripe:CreateCustomer
+Stripe Create PaymentIntent,stripe:CreatePaymentIntent
+PayPal Create Order,paypal:CreateOrder
+Shopify Create Order,shopify:CreateOrder
+Shopify Update Order,shopify:UpdateOrder
+WooCommerce Create Order,woocommerce:CreateOrder
+WordPress Create Post,wordpress:CreatePost
+WordPress Update Post,wordpress:UpdatePost
+Mailchimp Send Campaign,mailchimp:SendCampaign
+SendGrid Send Email,sendgrid:SendEmail
+Klaviyo Create Event,klaviyo:CreateEvent
+Zoom Create Meeting,zoom:CreateMeeting
+Calendly Create Invitee,calendly:CreateInvitee
+ClickUp Create Task,clickup:CreateTask
+Monday Create Item,monday:CreateItem
+Smartsheet Create Row,smartsheet:CreateRow
+Basecamp Create To-do,basecamp:CreateTodo
+Zoho CRM Create Record,zoho-crm:CreateRecord
+Zoho CRM Update Record,zoho-crm:UpdateRecord
+Freshdesk Create Ticket,freshdesk:CreateTicket
+Intercom Create Conversation,intercom:CreateConversation
+HubSpot Create Contact,hubspot:CreateContact
+HubSpot Update Contact,hubspot:UpdateContact
+Salesforce Create Record,salesforce:CreateRecord
+Salesforce Update Record,salesforce:UpdateRecord
+Salesforce Query,salesforce:Query
+Pipedrive Create Deal,pipedrive:CreateDeal
+Pipedrive Update Deal,pipedrive:UpdateDeal
+Facebook Leads Watch Leads,facebook-leads:WatchLeads
+Instagram Send Message,instagram:SendMessage
+LinkedIn Ads Create Campaign,linkedin-ads:CreateCampaign
+Twitter Post Tweet,twitter:PostTweet
+TikTok Ads Create Campaign,tiktok-ads:CreateCampaign
+Dropbox Upload File,dropbox:UploadFile
+Box Upload File,box:UploadFile
+OneDrive Upload File,onedrive:UploadFile
+SharePoint Create Item,sharepoint:CreateItem
+Microsoft Teams Send Message,microsoft-teams:SendMessage
+Outlook Send Email,outlook:SendEmail
+Office 365 Create Event,office365:CreateEvent
+RSS Watch Feed,rss:WatchFeed
+PDF Create,pdf:CreatePDF
+PDF Extract Text,pdf:ExtractText
+Image Resize,image:ResizeImage
+OCR Extract Text,ocr:ExtractText
+OpenAI Create Chat Completion,openai:CreateChatCompletion
+Anthropic Create Message,anthropic:CreateMessage
+Google AI (Gemini) Generate Text,google-ai:GenerateText
+Hugging Face Inference,huggingface:Inference
+AWS S3 Upload File,aws-s3:UploadFile
+AWS SES Send Email,aws-ses:SendEmail
+AWS DynamoDB Put Item,aws-dynamodb:PutItem
+AWS Lambda Invoke Function,aws-lambda:InvokeFunction
+Azure Blob Upload File,azure-blob:UploadFile
+Azure Functions Invoke,azure-functions:Invoke
+PostgreSQL Execute Query,postgres:ExecuteQuery
+MySQL Execute Query,mysql:ExecuteQuery
+MSSQL Execute Query,mssql:ExecuteQuery
+Snowflake Execute Query,snowflake:ExecuteQuery
+Redshift Execute Query,redshift:ExecuteQuery
+BigQuery Query,bigquery:Query
+MongoDB Insert Document,mongodb:InsertDocument
+Firestore Create Document,firestore:CreateDocument
+Firebase Realtime DB Push,firebase-realtime:Push
+Firebase Cloud Messaging Send,fcm:SendMessage
+Elasticsearch Index Document,elasticsearch:IndexDocument
+Algolia Save Object,algolia:SaveObject
+Webflow Create Item,webflow:CreateItem
+Webflow Update Item,webflow:UpdateItem
+Typeform Watch Responses,typeform:WatchResponses
+Jotform Watch Submissions,jotform:WatchSubmissions
+SurveyMonkey Watch Responses,surveymonkey:WatchResponses
+Bubble Data API,bubble:DataAPI
+AppSheet Invoke Action,appsheet:InvokeAction
+RSS Create,rss:CreateFeed
+Weather Get Daily Forecast,weather:ActionGetDailyForecast
+Webhook - Custom webhook,gateway:CustomWebHook
+HTTP - Make a request,http:ActionSendData
+HTTP - Get a file,http:ActionGetFile
+JSON - Parse JSON,json:ParseJSON
+JSON - Create JSON,json:CreateJSON
+Text parser - RegExp parser,regexp:Parser
+Text parser - HTML to text,regexp:HTMLToText
+Text parser - RegExp replace,regexp:Replace
+Tools - Set variable,util:SetVariable2
+RSS - Watch RSS feed,rss:TriggerNewArticle
+Flow control - Router,builtin:BasicRouter
+Flow control - Feeder (iterator),builtin:BasicFeeder
+Scenario - List scenario logs,make:listScenarioLogs
+Weather - Get current weather,weather:ActionGetCurrentWeather
+Image - Convert image,image:Convert
+Google Sheets - Watch rows,google-sheets:watchRows
+Google Sheets - Add row,google-sheets:addRow
+Google Sheets - Update row,google-sheets:updateRow
+Google Sheets - Get sheet content,google-sheets:getSheetContent
+Google Drive - Upload a file,google-drive:uploadAFile
+Google Email - Send an email,google-email:sendAnEmail
+Airtable - Create a record,airtable:ActionCreateRecord
+Airtable - Search records,airtable:ActionSearchRecords
+Typeform - Watch responses,typeform.watchResponses
+Facebook Lead Ads - Watch leads,facebook-lead-ads:WatchLeads
+Shopify - Watch orders,shopify:watchOrders
+Slack - Create a message,slack:createMessage
+Perplexity AI - Create a chat completion,perplexity-ai:createAChatCompletion
+Anthropic Claude - Create a message,anthropic-claude:createAMessage
+Email - Send an email,email:sendEmail
+Email - Watch emails,email:watchEmails
+Gmail - Send an email,gmail:SendEmail
+Gmail - Watch emails,gmail:WatchEmails
+Google Calendar - Watch events,google-calendar:watchEvents
+Google Calendar - Create an event,google-calendar:createEvent
+Google Docs - Create a document,google-docs:createDocument
+Google Docs - Get a document,google-docs:getDocument
+Google Drive - Get a file,google-drive:getAFile
+Google Drive - Copy a file,google-drive:copyAFile
+Google Drive - Watch files,google-drive:watchFiles
+Microsoft 365 Email - Send an email,microsoft365-email:SendAnEmail
+Microsoft 365 Email - Watch emails,microsoft365-email:WatchEmails
+Microsoft Excel - Add a row,excel:addRow
+Microsoft Excel - Update a row,excel:updateRow
+OneDrive - Upload a file,onedrive:uploadAFile
+OneDrive - Get a file,onedrive:getAFile
+Microsoft Teams - Create a message,teams:createMessage
+Microsoft Teams - Watch channel messages,teams:watchChannelMessages
+Twilio - Send an SMS,twilio:sendSms
+Twilio - Watch incoming SMS,twilio:watchSms
+Telegram Bot - Watch updates,telegram:watchUpdates
+Telegram Bot - Send a message,telegram:sendMessage
+Discord - Create a message,discord:createMessage
+Discord - Watch messages,discord:watchMessages
+Notion - Watch database items,notion:watchDatabaseItems
+Notion - Create a database item,notion:createADatabaseItem
+ClickUp - Create a task,clickup:createTask
+ClickUp - Watch tasks,clickup:watchTasks
+Asana - Create a task,asana:createTask
+Asana - Watch tasks,asana:watchTasks
+Trello - Create a card,trello:createCard
+Trello - Watch cards,trello:watchCards
+Monday.com - Create an item,monday:createItem
+Monday.com - Watch items,monday:watchItems
+HubSpot CRM - Create a contact,hubspot-crm:createContact
+HubSpot CRM - Watch contacts,hubspot-crm:watchContacts
+Pipedrive - Create a deal,pipedrive:createADeal
+Pipedrive - Watch deals,pipedrive:watchDeals
+Salesforce - Create a record,salesforce:createRecord
+Salesforce - Watch records,salesforce:watchRecords
+Stripe - Create a customer,stripe:createCustomer
