@@ -60,7 +60,7 @@ This repository provides a curated collection of Make.com scenario blueprints an
 
 \- Facebook: http://facebook.com/spunwebtechnology
 
-\- X: https://x.com/spun\_web
+\- X: https://x.com/spun_web
 
 \- Instagram: https://www.instagram.com/emeraldsundesigns/
 
